@@ -4,9 +4,11 @@ import (
 	"net/http"
 	"path"
 	"strconv"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/httprate"
 	"github.com/google/uuid"
 	"github.com/shinobi-mtr/be-wish/lib"
 )
@@ -76,6 +78,7 @@ func main() {
 	r := chi.NewRouter()
 
 	r.Use(middleware.Logger)
+	r.Use(httprate.LimitByIP(1, 1*time.Minute))
 
 	r.Post("/{uuid}", handleUUIDPost)
 	r.Get("/{uuid}", handleUUIDGet)
